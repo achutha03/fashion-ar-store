@@ -10,7 +10,6 @@
         :root { --primary: #000000; --secondary: #FF6B9D; --accent: #C9184A; --gold: #FFD700; --light: #F8F9FA; --dark: #212529; --success: #28A745; --danger: #DC3545; }
         body { font-family: 'Poppins', sans-serif; background: #FFFFFF; color: var(--dark); overflow-x: hidden; }
         
-        /* Header */
         header { background: var(--primary); color: white; box-shadow: 0 2px 20px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
         .top-bar { background: var(--secondary); padding: 10px 0; font-size: 0.9em; text-align: center; font-weight: 500; }
         .header-main { padding: 20px 0; }
@@ -26,7 +25,6 @@
         .header-btn:hover { background: var(--secondary); border-color: var(--secondary); transform: translateY(-2px); }
         .cart-badge { background: var(--danger); color: white; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 0.75em; font-weight: bold; }
         
-        /* Hero */
         .hero { background: linear-gradient(135deg, #000000 0%, #434343 100%); color: white; padding: 80px 20px; text-align: center; position: relative; overflow: hidden; }
         .hero::before { content: ''; position: absolute; width: 500px; height: 500px; background: radial-gradient(circle, rgba(255,107,157,0.3) 0%, transparent 70%); top: -200px; right: -200px; }
         .hero-content { position: relative; z-index: 1; }
@@ -37,7 +35,6 @@
         .hero-feature { display: flex; align-items: center; gap: 12px; font-size: 1.1em; font-weight: 500; }
         .hero-feature span { font-size: 2em; }
         
-        /* Categories */
         .categories { padding: 60px 20px; background: var(--light); }
         .section-title { text-align: center; font-family: 'Playfair Display', serif; font-size: 3em; color: var(--dark); margin-bottom: 50px; font-weight: 700; }
         .category-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
@@ -48,7 +45,6 @@
         .category-icon { font-size: 4em; margin-bottom: 20px; }
         .category-name { font-size: 1.3em; font-weight: 600; color: var(--dark); }
         
-        /* Products */
         .products-section { padding: 60px 20px; }
         .filters { display: flex; gap: 15px; margin-bottom: 50px; flex-wrap: wrap; justify-content: center; }
         .filter-btn { padding: 12px 30px; border: 2px solid var(--primary); background: white; color: var(--primary); border-radius: 25px; cursor: pointer; font-size: 1em; transition: all 0.3s; font-weight: 600; }
@@ -78,7 +74,6 @@
         .add-to-cart-btn:hover { transform: scale(1.05); box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
         .add-to-cart-btn:disabled { background: #ccc; cursor: not-allowed; }
         
-        /* Modal */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
         .modal-content { background: white; border-radius: 25px; padding: 40px; max-width: 800px; width: 90%; max-height: 90vh; overflow-y: auto; position: relative; animation: slideUp 0.3s ease; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
@@ -87,7 +82,6 @@
         .close-modal { font-size: 2.5em; cursor: pointer; color: #999; transition: all 0.3s; line-height: 1; }
         .close-modal:hover { color: var(--danger); transform: rotate(90deg); }
         
-        /* AR Modal */
         .ar-container { text-align: center; padding: 30px; background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%); border-radius: 20px; margin-bottom: 30px; }
         .ar-preview { width: 100%; max-width: 500px; height: 500px; margin: 0 auto; background: white; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 8em; box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative; overflow: hidden; }
         .ar-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; color: white; font-size: 0.3em; font-weight: 600; }
@@ -98,7 +92,6 @@
         .ar-info h3 { margin-bottom: 15px; color: var(--primary); }
         .ar-info p { line-height: 1.8; color: #666; }
         
-        /* Cart */
         .cart-item { display: flex; gap: 20px; padding: 20px; border-bottom: 2px solid #f0f0f0; align-items: center; }
         .cart-item-image { font-size: 3em; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; background: var(--light); border-radius: 15px; }
         .cart-item-info { flex: 1; }
@@ -119,7 +112,6 @@
         .empty-state { text-align: center; padding: 60px 20px; color: #999; }
         .empty-state-icon { font-size: 5em; margin-bottom: 20px; }
         
-        /* Admin */
         .admin-form { display: grid; gap: 20px; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .form-group { display: flex; flex-direction: column; gap: 8px; }
@@ -136,7 +128,6 @@
         .delete-btn { padding: 10px 20px; background: var(--danger); color: white; border: none; border-radius: 20px; cursor: pointer; font-weight: 600; transition: all 0.3s; }
         .delete-btn:hover { background: #c82333; transform: scale(1.05); }
         
-        /* Footer */
         footer { background: var(--primary); color: white; padding: 60px 20px 30px; margin-top: 80px; }
         .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 30px; }
         .footer-section h3 { margin-bottom: 20px; color: var(--secondary); font-family: 'Playfair Display', serif; font-size: 1.5em; }
@@ -144,11 +135,9 @@
         .footer-section a:hover { color: var(--secondary); }
         .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); }
         
-        /* Notification */
         .notification { position: fixed; top: 100px; right: 20px; background: var(--success); color: white; padding: 18px 30px; border-radius: 30px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); z-index: 3000; animation: slideInRight 0.3s ease; font-weight: 600; }
         @keyframes slideInRight { from { opacity: 0; transform: translateX(100px); } to { opacity: 1; transform: translateX(0); } }
         
-        /* Responsive */
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.5em; }
             .search-bar { order: 3; width: 100%; max-width: 100%; }
@@ -173,7 +162,6 @@
                         <button class="search-btn" onclick="searchProducts()">🔍</button>
                     </div>
                     <div class="header-actions">
-                        <button class="header-btn" onclick="openAdmin()">⚙️ Admin</button>
                         <button class="header-btn" onclick="toggleCart()">🛒 Cart<span class="cart-badge" id="cartCount">0</span></button>
                     </div>
                 </div>
@@ -306,6 +294,13 @@
         let currentFilter='all';
         let currentARProduct=null;
         let selectedSize=null;
+
+        // Secret admin access - Press Ctrl+Shift+A to open admin panel
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+                openAdmin();
+            }
+        });
 
         function init(){loadProducts();renderProducts();updateCartUI();}
         function loadProducts(){const saved=localStorage.getItem('fashionARProducts');if(saved){products=JSON.parse(saved);}}
