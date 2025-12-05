@@ -82,6 +82,14 @@
         .close-modal { font-size: 2.5em; cursor: pointer; color: #999; transition: all 0.3s; line-height: 1; }
         .close-modal:hover { color: var(--danger); transform: rotate(90deg); }
         
+        .password-container { text-align: center; padding: 40px; }
+        .password-container h3 { margin-bottom: 20px; color: var(--primary); }
+        .password-input { width: 100%; max-width: 400px; padding: 15px 20px; border: 2px solid #ddd; border-radius: 15px; font-size: 1.1em; margin: 20px auto; display: block; text-align: center; }
+        .password-input:focus { outline: none; border-color: var(--primary); }
+        .password-submit { padding: 15px 40px; background: var(--primary); color: white; border: none; border-radius: 25px; font-size: 1.1em; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .password-submit:hover { transform: scale(1.05); box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
+        .password-error { color: var(--danger); margin-top: 15px; font-weight: 600; }
+        
         .ar-container { text-align: center; padding: 30px; background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%); border-radius: 20px; margin-bottom: 30px; }
         .ar-preview { width: 100%; max-width: 500px; height: 500px; margin: 0 auto; background: white; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 8em; box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative; overflow: hidden; }
         .ar-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; color: white; font-size: 0.3em; font-weight: 600; }
@@ -240,6 +248,18 @@
         </div>
     </div>
 
+    <div class="modal" id="passwordModal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header"><h2 class="modal-title">Admin Access</h2><span class="close-modal" onclick="closePasswordModal()">×</span></div>
+            <div class="password-container">
+                <h3>🔐 Enter Admin Password</h3>
+                <input type="password" id="adminPassword" class="password-input" placeholder="Enter password" onkeypress="if(event.key==='Enter') verifyPassword()">
+                <button class="password-submit" onclick="verifyPassword()">Access Admin Panel</button>
+                <div id="passwordError" class="password-error"></div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal" id="adminModal">
         <div class="modal-content">
             <div class="modal-header"><h2 class="modal-title">Admin Panel</h2><span class="close-modal" onclick="closeAdmin()">×</span></div>
@@ -278,6 +298,7 @@
     </footer>
 
     <script>
+        const ADMIN_PASSWORD = 'FashionAR@2025';
         let products=[
             {id:1,name:'Classic White Shirt',category:'men',price:1299,originalPrice:1999,icon:'👔',description:'Premium cotton formal shirt with perfect fit',stock:50,rating:4.8,sizes:['S','M','L','XL','XXL'],arModel:''},
             {id:2,name:'Denim Jacket',category:'men',price:2499,originalPrice:3499,icon:'🧥',description:'Stylish blue denim jacket for casual wear',stock:30,rating:4.7,sizes:['M','L','XL'],arModel:''},
@@ -294,13 +315,35 @@
         let currentFilter='all';
         let currentARProduct=null;
         let selectedSize=null;
+        let isAdminAuthenticated=false;
 
-        // Secret admin access - Press Ctrl+Shift+A to open admin panel
         document.addEventListener('keydown', function(e) {
             if (e.ctrlKey && e.shiftKey && e.key === 'A') {
-                openAdmin();
+                e.preventDefault();
+                document.getElementById('passwordModal').style.display='flex';
+                document.getElementById('adminPassword').focus();
             }
         });
+
+        function verifyPassword(){
+            const password=document.getElementById('adminPassword').value;
+            if(password===ADMIN_PASSWORD){
+                isAdminAuthenticated=true;
+                closePasswordModal();
+                openAdmin();
+                document.getElementById('adminPassword').value='';
+                document.getElementById('passwordError').textContent='';
+            }else{
+                document.getElementById('passwordError').textContent='❌ Incorrect password!';
+                document.getElementById('adminPassword').value='';
+            }
+        }
+
+        function closePasswordModal(){
+            document.getElementById('passwordModal').style.display='none';
+            document.getElementById('adminPassword').value='';
+            document.getElementById('passwordError').textContent='';
+        }
 
         function init(){loadProducts();renderProducts();updateCartUI();}
         function loadProducts(){const saved=localStorage.getItem('fashionARProducts');if(saved){products=JSON.parse(saved);}}
@@ -517,6 +560,10 @@
         }
 
         function openAdmin(){
+            if(!isAdminAuthenticated){
+                showNotification('Please authenticate first!','warning');
+                return;
+            }
             document.getElementById('adminModal').style.display='flex';
             renderAdminProducts();
         }
