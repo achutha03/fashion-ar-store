@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fashion AR Store - Try Before You Buy with AR</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root { --primary: #000000; --secondary: #FF6B9D; --accent: #C9184A; --gold: #FFD700; --light: #F8F9FA; --dark: #212529; --success: #28A745; --danger: #DC3545; }
@@ -184,7 +185,7 @@
             <div class="hero-features">
                 <div class="hero-feature"><span>📱</span><span>AR Virtual Try-On</span></div>
                 <div class="hero-feature"><span>🚚</span><span>Free Shipping Above ₹1999</span></div>
-                <div class="hero-feature"><span>💳</span><span>Secure Payments</span></div>
+                <div class="hero-feature"><span>💳</span><span>Secure Razorpay Payments</span></div>
                 <div class="hero-feature"><span>↩️</span><span>Easy Returns</span></div>
             </div>
         </div>
@@ -263,6 +264,11 @@
     <div class="modal" id="adminModal">
         <div class="modal-content">
             <div class="modal-header"><h2 class="modal-title">Admin Panel</h2><span class="close-modal" onclick="closeAdmin()">×</span></div>
+            <div style="background: #FFF3CD; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #FFC107;">
+                <strong>💳 Razorpay Setup Required:</strong><br>
+                To enable live payments, add your Razorpay API keys in the code (line 1500).<br>
+                Get keys from: <a href="https://razorpay.com" target="_blank" style="color: #0066cc;">razorpay.com</a>
+            </div>
             <form class="admin-form" onsubmit="addProduct(event)">
                 <div class="form-row">
                     <div class="form-group"><label>Product Name *</label><input type="text" id="productName" required></div>
@@ -293,12 +299,15 @@
                 <div class="footer-section"><h3>Customer Service</h3><p>📞 1800-XXX-XXXX</p><p>📧 support@fashionar.com</p><p>⏰ 24/7 Support</p></div>
                 <div class="footer-section"><h3>Follow Us</h3><p><a href="#">Instagram</a></p><p><a href="#">Facebook</a></p><p><a href="#">Twitter</a></p><p><a href="#">YouTube</a></p></div>
             </div>
-            <div class="footer-bottom"><p>© 2025 FashionAR. All Rights Reserved. | Powered by AR Technology</p></div>
+            <div class="footer-bottom"><p>© 2025 FashionAR. All Rights Reserved. | Powered by AR Technology & Razorpay</p></div>
         </div>
     </footer>
 
     <script>
+        // RAZORPAY CONFIGURATION - Replace with your actual keys
+        const RAZORPAY_KEY_ID = 'rzp_test_XXXXXXXXXXXXXXXX'; // Replace with your Test/Live Key ID
         const ADMIN_PASSWORD = 'FashionAR@2025';
+        
         let products=[
             {id:1,name:'Classic White Shirt',category:'men',price:1299,originalPrice:1999,icon:'👔',description:'Premium cotton formal shirt with perfect fit',stock:50,rating:4.8,sizes:['S','M','L','XL','XXL'],arModel:''},
             {id:2,name:'Denim Jacket',category:'men',price:2499,originalPrice:3499,icon:'🧥',description:'Stylish blue denim jacket for casual wear',stock:30,rating:4.7,sizes:['M','L','XL'],arModel:''},
@@ -521,7 +530,7 @@
                     <div class="summary-row total"><span>Total:</span><span>₹${total}</span></div>
                     ${subtotal<1999?'<p style="color: var(--secondary); text-align: center; margin-top: 10px;">Add ₹'+(1999-subtotal)+' more for FREE shipping!</p>':''}
                 </div>
-                <button class="checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout 🔒</button>
+                <button class="checkout-btn" onclick="proceedToCheckout()">Pay with Razorpay 💳</button>
             `;
         }
 
@@ -549,14 +558,49 @@
 
         function proceedToCheckout(){
             if(cart.length===0){showNotification('Your cart is empty!','warning');return;}
-            const total=cart.reduce((sum,item)=>sum+(item.price*item.quantity),0);
-            const shipping=total>=1999?0:149;
-            const finalTotal=total+shipping;
-            alert(`ORDER SUMMARY\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n${cart.map(item=>`${item.name} (${item.size}) × ${item.quantity} = ₹${item.price*item.quantity}`).join('\n')}\n\nSubtotal: ₹${total}\nShipping: ${shipping===0?'FREE':'₹'+shipping}\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nTOTAL: ₹${finalTotal}\n\n🚚 Delivery in 3-5 days\n💳 Secure Payment Gateway\n\n✅ Redirecting to payment...`);
-            cart=[];
-            updateCartUI();
-            toggleCart();
-            showNotification('Order placed! 🎉');
+            
+            const subtotal=cart.reduce((sum,item)=>sum+(item.price*item.quantity),0);
+            const shipping=subtotal>=1999?0:149;
+            const total=subtotal+shipping;
+            
+            // Razorpay Payment Integration
+            const options = {
+                key: RAZORPAY_KEY_ID,
+                amount: total * 100, // Amount in paise
+                currency: 'INR',
+                name: 'FashionAR Store',
+                description: 'Fashion E-Commerce Purchase',
+                image: 'https://via.placeholder.com/150?text=FashionAR',
+                handler: function (response) {
+                    showNotification('Payment Successful! 🎉');
+                    console.log('Payment ID:', response.razorpay_payment_id);
+                    
+                    // Clear cart after successful payment
+                    cart = [];
+                    updateCartUI();
+                    toggleCart();
+                    
+                    alert(`✅ Order Confirmed!\n\nPayment ID: ${response.razorpay_payment_id}\n\nYour order will be delivered in 3-5 business days.\nThank you for shopping with FashionAR!`);
+                },
+                prefill: {
+                    name: '',
+                    email: '',
+                    contact: ''
+                },
+                notes: {
+                    address: 'FashionAR Store'
+                },
+                theme: {
+                    color: '#FF6B9D'
+                }
+            };
+            
+            const rzp = new Razorpay(options);
+            rzp.on('payment.failed', function (response){
+                showNotification('Payment Failed! Please try again.', 'warning');
+                console.error('Payment Error:', response.error);
+            });
+            rzp.open();
         }
 
         function openAdmin(){
